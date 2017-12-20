@@ -18,8 +18,8 @@
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.6,)" />
   </Dependencies>
   <Assets>
-    <Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="SonarAnalyzer.Common.VS2017" Path="|SonarAnalyzer.Common.VS2017|" />
-    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="SonarAnalyzer.Common.VS2017" Path="|SonarAnalyzer.Common.VS2017|" />
+    <Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="SonarAnalyzer.VS2017" Path="|SonarAnalyzer.VS2017|" />
+    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="SonarAnalyzer.VS2017" Path="|SonarAnalyzer.VS2017|" />
     <Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="SonarAnalyzer.CSharp.VS2017" Path="|SonarAnalyzer.CSharp.VS2017|" />
     <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="SonarAnalyzer.CSharp.VS2017" Path="|SonarAnalyzer.CSharp.VS2017|" />
     <Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="SonarAnalyzer.VisualBasic.VS2017" Path="|SonarAnalyzer.VisualBasic.VS2017|" />

@@ -248,9 +248,9 @@
       <Project>{9d2df65b-8bb4-4f85-8b71-c4b636513ef3}</Project>
       <Name>SonarAnalyzer.Vsix</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SonarAnalyzer.Common\SonarAnalyzer.Common.csproj">
+    <ProjectReference Include="..\..\SonarAnalyzer\SonarAnalyzer.csproj">
       <Project>{d1ae804f-ae78-4883-b3d6-9e3c4026def6}</Project>
-      <Name>SonarAnalyzer.Common</Name>
+      <Name>SonarAnalyzer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

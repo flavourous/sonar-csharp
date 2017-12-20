@@ -14,15 +14,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SonarAnalyzer.Common\SonarAnalyzer.Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Include="..\AssemblyInfo.Shared.cs" Link="Properties\AssemblyInfo.Shared.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <AdditionalFiles Include="..\SonarLint.xml" Link="Properties\SonarLint.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SonarAnalyzer\SonarAnalyzer.csproj" />
   </ItemGroup>
 
 </Project>
