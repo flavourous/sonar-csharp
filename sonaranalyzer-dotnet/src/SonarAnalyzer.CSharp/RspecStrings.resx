@@ -3048,6 +3048,33 @@
   <data name="S2306_Type" xml:space="preserve">
     <value>CODE_SMELL</value>
   </data>
+  <data name="S2310_Category" xml:space="preserve">
+    <value>Critical Code Smell</value>
+  </data>
+  <data name="S2310_Description" xml:space="preserve">
+    <value>Loop counters should not be modified in the body of the loop. However other loop control variables representing logical values may be modified in the loop, for example a flag to indicate that something has been completed, which is then tested in the for statement.</value>
+  </data>
+  <data name="S2310_IsActivatedByDefault" xml:space="preserve">
+    <value>True</value>
+  </data>
+  <data name="S2310_Remediation" xml:space="preserve">
+    <value>Constant/Issue</value>
+  </data>
+  <data name="S2310_RemediationCost" xml:space="preserve">
+    <value>5min</value>
+  </data>
+  <data name="S2310_Severity" xml:space="preserve">
+    <value>Critical</value>
+  </data>
+  <data name="S2310_Tags" xml:space="preserve">
+    <value>pitfall</value>
+  </data>
+  <data name="S2310_Title" xml:space="preserve">
+    <value>Loop counters should not be assigned to from within the loop body</value>
+  </data>
+  <data name="S2310_Type" xml:space="preserve">
+    <value>CODE_SMELL</value>
+  </data>
   <data name="S2325_Category" xml:space="preserve">
     <value>Minor Code Smell</value>
   </data>
