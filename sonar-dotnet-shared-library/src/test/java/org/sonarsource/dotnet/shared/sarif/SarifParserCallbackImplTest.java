@@ -61,7 +61,7 @@ public class SarifParserCallbackImplTest {
 
   @Test
   public void should_add_project_issues() {
-    callback.onProjectIssue("rule1", "msg");
+    callback.onProjectIssue("rule1", "msg", null);
     assertThat(ctx.allIssues()).hasSize(1);
     assertThat(ctx.allIssues().iterator().next().primaryLocation().inputComponent().key()).isEqualTo("projectKey");
     assertThat(ctx.allIssues().iterator().next().ruleKey().rule()).isEqualTo("rule1");
@@ -70,7 +70,7 @@ public class SarifParserCallbackImplTest {
   @Test
   public void should_add_file_issues() {
     String absoluteFilePath = temp.getRoot().toPath().resolve("file1").toString();
-    callback.onFileIssue("rule1", absoluteFilePath, "msg");
+    callback.onFileIssue("rule1", absoluteFilePath, "msg", null);
     assertThat(ctx.allIssues()).hasSize(1);
     assertThat(ctx.allIssues().iterator().next().primaryLocation().inputComponent().key()).isEqualTo("module1:file1");
     assertThat(ctx.allIssues().iterator().next().ruleKey().rule()).isEqualTo("rule1");
@@ -79,26 +79,26 @@ public class SarifParserCallbackImplTest {
   @Test
   public void should_ignore_file_issue_with_unknown_rule_key() {
     String absoluteFilePath = temp.getRoot().toPath().resolve("file1").toString();
-    callback.onFileIssue("rule45", absoluteFilePath, "msg");
+    callback.onFileIssue("rule45", absoluteFilePath, "msg", null);
     assertThat(ctx.allIssues()).isEmpty();
   }
 
   @Test
   public void should_ignore_file_issue_with_unknown_file() {
-    callback.onFileIssue("rule1", "file-unknown", "msg");
+    callback.onFileIssue("rule1", "file-unknown", "msg", null);
     assertThat(ctx.allIssues()).isEmpty();
   }
 
   @Test
   public void should_ignore_project_issue_with_unknown_rule_key() {
-    callback.onProjectIssue("rule45", "msg");
+    callback.onProjectIssue("rule45", "msg", null);
     assertThat(ctx.allIssues()).isEmpty();
   }
 
   @Test
   public void should_add_issues() {
-    callback.onIssue("rule1", createLocation("file1", 2, 3), Collections.emptyList());
-    callback.onIssue("rule2", createLocation("file1", 2, 3), Collections.emptyList());
+    callback.onIssue("rule1", createLocation("file1", 2, 3), Collections.emptyList(), null);
+    callback.onIssue("rule2", createLocation("file1", 2, 3), Collections.emptyList(), null);
 
     assertThat(ctx.allIssues()).extracting("ruleKey").extracting("rule")
       .containsOnly("rule1", "rule2");
@@ -106,7 +106,7 @@ public class SarifParserCallbackImplTest {
 
   @Test
   public void should_add_issue_with_secondary_location() {
-    callback.onIssue("rule1", createLocation("file1", 2, 3), Collections.singletonList(createLocation("file1", 4, 5)));
+    callback.onIssue("rule1", createLocation("file1", 2, 3), Collections.singletonList(createLocation("file1", 4, 5)), null);
 
     assertThat(ctx.allIssues()).hasSize(1);
 
@@ -126,8 +126,8 @@ public class SarifParserCallbackImplTest {
 
   @Test
   public void should_ignore_repeated_issues() {
-    callback.onIssue("rule1", createLocation("file1", 2, 3), Collections.emptyList());
-    callback.onIssue("rule1", createLocation("file1", 2, 3), Collections.emptyList());
+    callback.onIssue("rule1", createLocation("file1", 2, 3), Collections.emptyList(), null);
+    callback.onIssue("rule1", createLocation("file1", 2, 3), Collections.emptyList(), null);
 
     assertThat(ctx.allIssues()).hasSize(1);
     assertThat(ctx.allIssues()).extracting("ruleKey").extracting("rule")

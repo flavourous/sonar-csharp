@@ -73,20 +73,20 @@ class SarifParser01And04 implements SarifParser {
 
     JsonArray locationsArray = issue.getAsJsonArray("locations");
     if (locationsArray.size() == 0) {
-      callback.onProjectIssue(ruleId, message);
+      callback.onProjectIssue(ruleId, message, null);
       return;
     }
 
     JsonObject primaryLocationObject = getAnalysisTargetAt(locationsArray, 0);
     if (primaryLocationObject == null) {
-      callback.onProjectIssue(ruleId, message);
+      callback.onProjectIssue(ruleId, message, null);
       return;
     }
 
     String primaryLocationPath = toRealPath.apply(uriToAbsolutePath(primaryLocationObject.get("uri").getAsString()));
     Location primaryLocation = getLocation(offsetStartAtZero, primaryLocationObject, primaryLocationPath, message);
     if (primaryLocation == null) {
-      callback.onFileIssue(ruleId, primaryLocationPath, message);
+      callback.onFileIssue(ruleId, primaryLocationPath, message, null);
       return;
     }
 
@@ -102,7 +102,7 @@ class SarifParser01And04 implements SarifParser {
       }
     }
 
-    callback.onIssue(ruleId, primaryLocation, secondaryLocations);
+    callback.onIssue(ruleId, primaryLocation, secondaryLocations, null);
   }
 
   @CheckForNull

@@ -23,9 +23,9 @@ import java.util.Collection;
 
 public interface SarifParserCallback {
 
-  void onProjectIssue(String ruleId, String message);
+  void onProjectIssue(String ruleId, String message, Double gap);
 
-  void onFileIssue(String ruleId, String absolutePath, String message);
+  void onFileIssue(String ruleId, String absolutePath, String message, Double gap);
 
-  void onIssue(String ruleId, Location primaryLocation, Collection<Location> secondaryLocations);
+  void onIssue(String ruleId, Location primaryLocation, Collection<Location> secondaryLocations, Double gap);
 }

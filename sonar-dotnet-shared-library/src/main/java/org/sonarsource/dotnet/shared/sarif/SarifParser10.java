@@ -28,6 +28,8 @@ import com.google.gson.reflect.TypeToken;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -66,6 +68,26 @@ class SarifParser10 implements SarifParser {
     }
   }
 
+  private Double getGap(JsonObject resultObj) {
+    Double gap = null;
+    if (resultObj.has("properties")) {
+      JsonObject properties = resultObj.getAsJsonObject("properties");
+      if (properties.has("customProperties")) {
+        JsonObject customProperties = properties.getAsJsonObject("customProperties");
+        if (customProperties.has("gap")) {
+          String sv = customProperties.get("gap").getAsString();
+          try {
+            gap = Double.parseDouble(sv);
+          }
+          catch (NumberFormatException ne) {
+            gap = null;
+          }
+        }
+      }
+    }
+    return gap;
+  }
+
   private void handleIssue(JsonObject resultObj, SarifParserCallback callback) {
     if (isSuppressed(resultObj)) {
       return;
@@ -73,8 +95,9 @@ class SarifParser10 implements SarifParser {
 
     String ruleId = resultObj.get("ruleId").getAsString();
     String message = resultObj.get("message").getAsString();
+
     if (!handleLocationsElement(resultObj, ruleId, message, callback)) {
-      callback.onProjectIssue(ruleId, message);
+      callback.onProjectIssue(ruleId, message, getGap(resultObj));
     }
   }
 
@@ -102,10 +125,10 @@ class SarifParser10 implements SarifParser {
     }
 
     JsonObject firstIssueLocation = locations.get(0).getAsJsonObject().getAsJsonObject("resultFile");
-    return handleResultFileElement(ruleId, message, firstIssueLocation, relatedLocations, messageMap, callback);
+    return handleResultFileElement(ruleId, message, resultObj, firstIssueLocation, relatedLocations, messageMap, callback);
   }
 
-  private boolean handleResultFileElement(String ruleId, String message, JsonObject resultFileObj, JsonArray relatedLocations,
+  private boolean handleResultFileElement(String ruleId, String message, JsonObject resultObj, JsonObject resultFileObj, JsonArray relatedLocations,
     Map<String, String> messageMap, SarifParserCallback callback) {
     if (!resultFileObj.has("uri") || !resultFileObj.has("region")) {
       return false;
@@ -115,7 +138,7 @@ class SarifParser10 implements SarifParser {
     if (primaryLocation == null) {
       String uri = resultFileObj.get("uri").getAsString();
       String absolutePath = toRealPath.apply(uriToAbsolutePath(uri));
-      callback.onFileIssue(ruleId, absolutePath, message);
+      callback.onFileIssue(ruleId, absolutePath, message, getGap(resultObj));
     } else {
       Collection<Location> secondaryLocations = new ArrayList<>();
       for (JsonElement relatedLocationEl : relatedLocations) {
@@ -130,7 +153,7 @@ class SarifParser10 implements SarifParser {
         }
         secondaryLocations.add(secondaryLocation);
       }
-      callback.onIssue(ruleId, primaryLocation, secondaryLocations);
+      callback.onIssue(ruleId, primaryLocation, secondaryLocations, getGap(resultObj));
     }
 
     return true;

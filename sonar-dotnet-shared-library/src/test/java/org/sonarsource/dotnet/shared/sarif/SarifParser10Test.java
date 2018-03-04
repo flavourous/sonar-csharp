@@ -71,9 +71,9 @@ public class SarifParser10Test {
 
     InOrder inOrder = inOrder(callback);
     Location location = new Location(new File(baseDir, "Foo.cs").getAbsolutePath(), "One issue per line", 1, 0, 1, 13);
-    inOrder.verify(callback).onIssue("S1234", location, Collections.emptyList());
+    inOrder.verify(callback).onIssue("S1234", location, Collections.emptyList(), null);
     location = new Location(new File(baseDir, "Bar.cs").getAbsolutePath(), "One issue per line", 2, 0, 2, 33);
-    inOrder.verify(callback).onIssue("S1234", location, Collections.emptyList());
+    inOrder.verify(callback).onIssue("S1234", location, Collections.emptyList(), null);
     verifyNoMoreInteractions(callback);
   }
 
@@ -84,14 +84,14 @@ public class SarifParser10Test {
 
     InOrder inOrder = inOrder(callback);
     String filePath = new File(baseDir, "Program.cs").getAbsolutePath();
-    inOrder.verify(callback).onFileIssue(eq("S104"), eq(filePath), eq("Some dummy message"));
-    inOrder.verify(callback).onFileIssue(eq("S105"), eq(filePath), eq("Some dummy message"));
+    inOrder.verify(callback).onFileIssue(eq("S104"), eq(filePath), eq("Some dummy message"), eq(null));
+    inOrder.verify(callback).onFileIssue(eq("S105"), eq(filePath), eq("Some dummy message"), eq(null));
     Location location = new Location(filePath, "Some dummy message", 1, 0, 1, 1);
-    inOrder.verify(callback).onIssue("S105", location, Collections.emptyList());
+    inOrder.verify(callback).onIssue("S105", location, Collections.emptyList(), null);
     location = new Location(filePath, "Some dummy message", 1, 0, 2, 0);
-    inOrder.verify(callback).onIssue("S105", location, Collections.emptyList());
+    inOrder.verify(callback).onIssue("S105", location, Collections.emptyList(), null);
 
-    inOrder.verify(callback).onFileIssue(eq("S106"), eq(filePath), eq("Some dummy message"));
+    inOrder.verify(callback).onFileIssue(eq("S106"), eq(filePath), eq("Some dummy message"), eq(null));
 
     verifyNoMoreInteractions(callback);
   }
@@ -103,7 +103,7 @@ public class SarifParser10Test {
 
     InOrder inOrder = inOrder(callback);
     Location location = new Location(new File(baseDir, "Bar.cs").getAbsolutePath(), "One issue per line", 2, 0, 2, 33);
-    inOrder.verify(callback).onIssue("S1234", location, Collections.emptyList());
+    inOrder.verify(callback).onIssue("S1234", location, Collections.emptyList(), null);
     verifyNoMoreInteractions(callback);
   }
 
@@ -116,7 +116,7 @@ public class SarifParser10Test {
     InOrder inOrder = inOrder(callback);
     Location location = new Location(new File(baseDir, "ConsoleApplication1/P@!$#&+-=r^{}og_r()a m[1].cs").getAbsolutePath(),
       "Add a 'protected' constructor or the 'static' keyword to the class declaration.", 9, 10, 9, 17);
-    inOrder.verify(callback).onIssue("S1118", location, Collections.emptyList());
+    inOrder.verify(callback).onIssue("S1118", location, Collections.emptyList(), null);
     verifyNoMoreInteractions(callback);
   }
 
@@ -126,7 +126,7 @@ public class SarifParser10Test {
     new SarifParser10(getRoot("v1_0_no_location.json"), String::toString).accept(callback);
 
     InOrder inOrder = inOrder(callback);
-    inOrder.verify(callback).onProjectIssue("S1234", "One issue per line");
+    inOrder.verify(callback).onProjectIssue("S1234", "One issue per line", null);
     verifyNoMoreInteractions(callback);
   }
 
@@ -136,7 +136,7 @@ public class SarifParser10Test {
     new SarifParser10(getRoot("v1_0_empty_location.json"), String::toString).accept(callback);
 
     InOrder inOrder = inOrder(callback);
-    inOrder.verify(callback).onProjectIssue("S1234", "One issue per line");
+    inOrder.verify(callback).onProjectIssue("S1234", "One issue per line", null);
     verifyNoMoreInteractions(callback);
   }
 
@@ -150,12 +150,12 @@ public class SarifParser10Test {
     Location location = new Location(filePath,
       "Add a nested comment explaining why this method is empty, throw a \"NotSupportedException\" or complete the implementation.",
       26, 20, 26, 24);
-    inOrder.verify(callback).onIssue("S1186", location, Collections.emptyList());
+    inOrder.verify(callback).onIssue("S1186", location, Collections.emptyList(), null);
     location = new Location(filePath, "Remove this unused method parameter \"args\".", 26, 25, 26, 38);
-    inOrder.verify(callback).onIssue("S1172", location, Collections.emptyList());
+    inOrder.verify(callback).onIssue("S1172", location, Collections.emptyList(), null);
     location = new Location(filePath, "Add a \"protected\" constructor or the \"static\" keyword to the class declaration.",
       9, 17, 9, 24);
-    inOrder.verify(callback).onIssue("S1118", location, Collections.emptyList());
+    inOrder.verify(callback).onIssue("S1118", location, Collections.emptyList(), null);
 
     verifyNoMoreInteractions(callback);
   }
@@ -168,7 +168,7 @@ public class SarifParser10Test {
     InOrder inOrder = inOrder(callback);
     Location location = new Location(new File(baseDir, "git/Temp Folder SomeRandom!@#$%^&()/csharp/ConsoleApplication1/Program.cs").getAbsolutePath(),
       "Method has 3 parameters, which is greater than the 2 authorized.", 52, 23, 52, 47);
-    inOrder.verify(callback).onIssue("S107", location, Collections.emptyList());
+    inOrder.verify(callback).onIssue("S107", location, Collections.emptyList(), null);
     verifyNoMoreInteractions(callback);
   }
 
@@ -176,7 +176,7 @@ public class SarifParser10Test {
   public void dont_fail_on_empty_report() throws IOException {
     SarifParserCallback callback = mock(SarifParserCallback.class);
     new SarifParser10(getRoot("v1_0_empty.json"), String::toString).accept(callback);
-    verify(callback, Mockito.never()).onIssue(Mockito.anyString(), Mockito.any(Location.class), Mockito.anyCollectionOf(Location.class));
+    verify(callback, Mockito.never()).onIssue(Mockito.anyString(), Mockito.any(Location.class), Mockito.anyCollectionOf(Location.class), eq(null));
   }
 
   @Test
@@ -190,14 +190,16 @@ public class SarifParser10Test {
       28, 34, 28, 51);
     Collection<Location> secondaryLocations = new ArrayList<>();
     secondaryLocations.add(new Location(filePath, null, 28, 13, 28, 30));
-    inOrder.verify(callback).onIssue("S1764", primaryLocation, secondaryLocations);
+    inOrder.verify(callback).onIssue("S1764", primaryLocation, secondaryLocations, null);
     verifyNoMoreInteractions(callback);
   }
 
   @Test
   public void sarif_version_1_0_secondary_locations_messages() throws IOException {
     SarifParserCallback callback = mock(SarifParserCallback.class);
-    new SarifParser10(getRoot("v1_0_secondary_locations_messages.json"), String::toString).accept(callback);
+    JsonObject root = getRoot("v1_0_secondary_locations_messages.json");
+    SarifParser10 parser = new SarifParser10(root, String::toString);
+    parser.accept(callback);
 
     InOrder inOrder = inOrder(callback);
     String filePath = new File(baseDir, "Foo.cs").getAbsolutePath();
@@ -207,7 +209,7 @@ public class SarifParser10Test {
     secondaryLocations.add(new Location(filePath, "+1", 56, 12, 56, 14));
     secondaryLocations.add(new Location(filePath, "+2 (incl 1 for nesting)", 65, 16, 65, 18));
     secondaryLocations.add(new Location(filePath, "+1", 65, 52, 65, 54));
-    inOrder.verify(callback).onIssue("S3776", primaryLocation, secondaryLocations);
+    inOrder.verify(callback).onIssue("S3776", primaryLocation, secondaryLocations, null);
     verifyNoMoreInteractions(callback);
   }
 

@@ -44,7 +44,7 @@ public class SarifParserCallbackImpl implements SarifParserCallback {
   }
 
   @Override
-  public void onProjectIssue(String ruleId, String message) {
+  public void onProjectIssue(String ruleId, String message, Double gap) {
     String repositoryKey = repositoryKeyByRoslynRuleKey.get(ruleId);
     if (repositoryKey == null) {
       return;
@@ -54,12 +54,13 @@ public class SarifParserCallbackImpl implements SarifParserCallback {
       .forRule(RuleKey.of(repositoryKey, ruleId))
       .at(newIssue.newLocation()
         .on(context.module())
-        .message(message))
-      .save();
+        .message(message));
+    if(gap != null) newIssue.gap(gap);
+    newIssue.save();
   }
 
   @Override
-  public void onFileIssue(String ruleId, String absolutePath, String message) {
+  public void onFileIssue(String ruleId, String absolutePath, String message, Double gap) {
     String repositoryKey = repositoryKeyByRoslynRuleKey.get(ruleId);
     if (repositoryKey == null) {
       return;
@@ -76,12 +77,13 @@ public class SarifParserCallbackImpl implements SarifParserCallback {
       .forRule(RuleKey.of(repositoryKey, ruleId))
       .at(newIssue.newLocation()
         .on(inputFile)
-        .message(message))
-      .save();
+        .message(message));
+    if(gap != null) newIssue.gap(gap);
+    newIssue.save();
   }
 
   @Override
-  public void onIssue(String ruleId, Location primaryLocation, Collection<Location> secondaryLocations) {
+  public void onIssue(String ruleId, Location primaryLocation, Collection<Location> secondaryLocations, Double gap) {
     String repositoryKey = repositoryKeyByRoslynRuleKey.get(ruleId);
     if (repositoryKey == null) {
       return;
@@ -106,6 +108,7 @@ public class SarifParserCallbackImpl implements SarifParserCallback {
         .at(inputFile.newRange(primaryLocation.getStartLine(), primaryLocation.getStartColumn(),
           primaryLocation.getEndLine(), primaryLocation.getEndColumn()))
         .message(primaryLocation.getMessage()));
+    if(gap != null) newIssue.gap(gap);
 
     for (Location secondaryLocation : secondaryLocations) {
       if (!inputFile.absolutePath().equalsIgnoreCase(secondaryLocation.getAbsolutePath())) {
