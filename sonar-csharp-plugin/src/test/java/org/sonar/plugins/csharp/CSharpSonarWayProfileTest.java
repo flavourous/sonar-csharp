@@ -30,14 +30,28 @@ import java.io.Reader;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import java.io.StringWriter;
+import java.io.PrintWriter;
+
 public class CSharpSonarWayProfileTest {
 
   @Test
   public void test() {
+  try {
     XMLProfileParser xmlParser = mock(XMLProfileParser.class);
     ValidationMessages validation = ValidationMessages.create();
     RulesProfile profile = new CSharpSonarWayProfile(xmlParser).createProfile(validation);
     verify(xmlParser).parse(Mockito.any(Reader.class), Mockito.same(validation));
+    }
+    catch(Exception e) {
+      StringWriter writer = new StringWriter();
+      PrintWriter printWriter = new PrintWriter( writer );
+      e.printStackTrace( printWriter );
+      printWriter.flush();
+
+      String stackTrace = writer.toString();
+      throw new RuntimeException(e.toString() + ": " + stackTrace);
+    }
   }
 
 }
